@@ -6,7 +6,10 @@ import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard'
 import Equipments from '../pages/Equipments'
 import Users from '../pages/Users'
-import PlaceholderPage from '../pages/PlaceholderPage'
+import Actions from '../pages/Actions'
+import Incidents from '../pages/Incidents'
+import Ideas from '../pages/Ideas'
+import Audits5S from '../pages/Audits5S'
 import ProtectedRoute from '../components/ProtectedRoute'
 import MainLayout from '../layouts/MainLayout'
 import { useAuthStore } from '../store/authStore'
@@ -56,7 +59,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['admin', 'quality_manager']}>
                   <MainLayout>
-                    <PlaceholderPage title="Actions" description="Action management is ready for integration." />
+                    <Actions />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -66,7 +69,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <PlaceholderPage title="Incidents" description="Incident management is ready for integration." />
+                    <Incidents />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -76,7 +79,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <PlaceholderPage title="Ideas" description="Innovation workflow page ready for backend data." />
+                    <Ideas />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -86,7 +89,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['admin', 'quality_manager']}>
                   <MainLayout>
-                    <PlaceholderPage title="5S Audits" description="Audit management page ready for live API data." />
+                    <Audits5S />
                   </MainLayout>
                 </ProtectedRoute>
               }

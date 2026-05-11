@@ -1,0 +1,74 @@
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import ActionButton from '../ui/ActionButton'
+
+const ideaSchema = z.object({
+  title: z.string().trim().min(3, 'Title must be at least 3 characters long.'),
+  description: z.string().trim().min(5, 'Description must be at least 5 characters long.'),
+})
+
+function toErrorMap(zodError) {
+  return zodError.issues.reduce((acc, issue) => {
+    const key = issue.path[0]
+    if (typeof key === 'string' && !acc[key]) {
+      acc[key] = { message: issue.message }
+    }
+    return acc
+  }, {})
+}
+
+export default function IdeaForm({ mode, initialValues, onSubmit, onCancel, isSubmitting }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+  })
+
+  useEffect(() => {
+    reset(initialValues)
+  }, [initialValues, reset])
+
+  const submitHandler = (values) => {
+    const parsed = ideaSchema.safeParse(values)
+
+    if (!parsed.success) {
+      const errorMap = toErrorMap(parsed.error)
+      Object.entries(errorMap).forEach(([field, error]) => {
+        setError(field, error)
+      })
+      return
+    }
+
+    onSubmit(parsed.data)
+  }
+
+  return (
+    <form className="auth-form" onSubmit={handleSubmit(submitHandler)}>
+      <div className="field">
+        <label className="label" htmlFor="idea-title">Title</label>
+        <input id="idea-title" className="input" {...register('title')} />
+        {errors.title ? <p className="error-text">{errors.title.message}</p> : null}
+      </div>
+
+      <div className="field">
+        <label className="label" htmlFor="idea-description">Description</label>
+        <textarea id="idea-description" rows={5} className="textarea" {...register('description')} />
+        {errors.description ? <p className="error-text">{errors.description.message}</p> : null}
+      </div>
+
+      <div className="button-row" style={{ justifyContent: 'flex-end' }}>
+        <ActionButton type="button" variant="ghost" onClick={onCancel}>
+          Cancel
+        </ActionButton>
+        <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
+          {isSubmitting ? 'Saving...' : mode === 'edit' ? 'Update Idea' : 'Submit Idea'}
+        </ActionButton>
+      </div>
+    </form>
+  )
+}

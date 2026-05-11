@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { Activity, ClipboardList, Gauge, Inbox, Layers3, LifeBuoy, Users, Wrench } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import logo from '../assets/wii.svg'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: Gauge },
@@ -17,7 +18,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar-panel">
       <div className="sidebar-brand">
-        <div className="sidebar-badge">SQM</div>
+        <div className="sidebar-badge">
+          <img src={logo} alt="Smart Quality Manager Logo" className="sidebar-logo" />
+        </div>
         <div>
           <div className="sidebar-title">Smart Quality Manager</div>
           <div className="muted" style={{ fontSize: '0.88rem', marginTop: 2 }}>

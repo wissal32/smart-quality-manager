@@ -6,7 +6,10 @@ import Login from '../pages/Login.jsx'
 import Dashboard from '../pages/Dashboard.jsx'
 import Equipments from '../pages/Equipments.jsx'
 import Users from '../pages/Users.jsx'
-import PlaceholderPage from '../pages/PlaceholderPage.jsx'
+import Actions from '../pages/Actions.jsx'
+import Incidents from '../pages/Incidents.jsx'
+import Ideas from '../pages/Ideas.jsx'
+import Audits5S from '../pages/Audits5S.jsx'
 import ProtectedRoute from '../components/ProtectedRoute.jsx'
 import MainLayout from '../layouts/MainLayout.jsx'
 import { useAuthStore } from '../store/authStore'
@@ -56,7 +59,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['admin', 'quality_manager']}>
                   <MainLayout>
-                    <PlaceholderPage title="Actions" description="Action management is ready for integration." />
+                    <Actions />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -66,7 +69,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <PlaceholderPage title="Incidents" description="Incident management is ready for integration." />
+                    <Incidents />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -76,7 +79,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <PlaceholderPage title="Ideas" description="Innovation workflow page ready for backend data." />
+                    <Ideas />
                   </MainLayout>
                 </ProtectedRoute>
               }
@@ -86,7 +89,7 @@ export default function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['admin', 'quality_manager']}>
                   <MainLayout>
-                    <PlaceholderPage title="5S Audits" description="Audit management page ready for live API data." />
+                    <Audits5S />
                   </MainLayout>
                 </ProtectedRoute>
               }

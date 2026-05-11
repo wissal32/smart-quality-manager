@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import logo from '../assets/wii.svg'
 
 const loginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -70,7 +71,9 @@ export default function Login() {
       >
         <div className="auth-top">
           <div className="brand-row">
-            <div className="auth-logo">SQM</div>
+            <div className="auth-logo">
+              <img src={logo} alt="Smart Quality Manager Logo" className="auth-logo-img" />
+            </div>
             <div>
               <div className="sidebar-title">Smart Quality Manager</div>
               <div className="muted" style={{ fontSize: '0.9rem', marginTop: 2 }}>
