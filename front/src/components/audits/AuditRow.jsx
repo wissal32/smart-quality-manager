@@ -1,5 +1,6 @@
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import ActionButton from '../ui/ActionButton'
+import { fr } from '../../i18n/fr'
 
 function getScoreBadgeClass(score) {
   if (!score) return 'badge badge-info'
@@ -17,7 +18,7 @@ export default function AuditRow({ audit, onView, onEdit, onDelete }) {
   const zoneName = audit.zone?.name || `Zone #${audit.zone_id}`
   
   // Properly handle createdBy - ensure it's displaying a name, never an object
-  let creatorName = 'Unknown User'
+  let creatorName = fr.common.messages.noData || 'Utilisateur inconnu'
   
   if (typeof audit.createdBy === 'object' && audit.createdBy?.name) {
     creatorName = audit.createdBy.name
@@ -33,20 +34,20 @@ export default function AuditRow({ audit, onView, onEdit, onDelete }) {
       <td>{creatorName}</td>
       <td>
         <span className={getScoreBadgeClass(audit.score)}>
-          {audit.score ? `${audit.score}/25` : 'N/A'}
+          {audit.score ? `${audit.score}/25` : 'N/D'}
         </span>
       </td>
       <td>{createdAtLabel}</td>
       <td>
         <div className="table-action-row" style={{ gap: 8 }}>
           <ActionButton variant="ghost" icon={Eye} onClick={() => onView(audit)}>
-            View
+            {fr.audits5s.buttons.view}
           </ActionButton>
           <ActionButton variant="ghost" icon={Pencil} onClick={() => onEdit(audit)}>
-            Edit
+            {fr.common.buttons.edit}
           </ActionButton>
           <ActionButton variant="danger" icon={Trash2} onClick={() => onDelete(audit)}>
-            Delete
+            {fr.common.buttons.delete}
           </ActionButton>
         </div>
       </td>

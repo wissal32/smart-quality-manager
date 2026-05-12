@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { fr } from '../../i18n/fr'
 import ActionButton from '../ui/ActionButton'
 
 const incidentSchema = z.object({
-  title: z.string().trim().min(3, 'Title must be at least 3 characters long.'),
-  description: z.string().trim().min(5, 'Description must be at least 5 characters long.'),
-  category: z.string().trim().min(2, 'Category is required.'),
+  title: z.string().trim().min(3, fr.incidents.form.titleValidation),
+  description: z.string().trim().min(5, fr.incidents.form.descriptionValidation),
+  category: z.string().trim().min(2, fr.incidents.form.categoryValidation),
   severity: z.enum(['low', 'medium', 'high']),
-  assigned_to: z.coerce.number().int().positive('Assigned user is required.'),
+  assigned_to: z.coerce.number().int().positive(fr.actions.form.assignedUserValidation),
   status: z.enum(['open', 'in_progress', 'resolved']),
 })
 
@@ -54,30 +55,30 @@ export default function IncidentForm({ mode, initialValues, users, onSubmit, onC
   return (
     <form className="auth-form" onSubmit={handleSubmit(submitHandler)}>
       <div className="field">
-        <label className="label" htmlFor="incident-title">Title</label>
+        <label className="label" htmlFor="incident-title">{fr.incidents.form.title}</label>
         <input id="incident-title" className="input" {...register('title')} />
         {errors.title ? <p className="error-text">{errors.title.message}</p> : null}
       </div>
 
       <div className="field">
-        <label className="label" htmlFor="incident-description">Description</label>
+        <label className="label" htmlFor="incident-description">{fr.incidents.form.description}</label>
         <textarea id="incident-description" rows={4} className="textarea" {...register('description')} />
         {errors.description ? <p className="error-text">{errors.description.message}</p> : null}
       </div>
 
       <div className="users-grid">
         <div className="field">
-          <label className="label" htmlFor="incident-category">Category</label>
+          <label className="label" htmlFor="incident-category">{fr.incidents.form.category}</label>
           <input id="incident-category" className="input" {...register('category')} />
           {errors.category ? <p className="error-text">{errors.category.message}</p> : null}
         </div>
 
         <div className="field">
-          <label className="label" htmlFor="incident-severity">Severity</label>
+          <label className="label" htmlFor="incident-severity">{fr.incidents.form.severity}</label>
           <select id="incident-severity" className="select" {...register('severity')}>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low">{fr.incidents.form.severityOptions.low}</option>
+            <option value="medium">{fr.incidents.form.severityOptions.medium}</option>
+            <option value="high">{fr.incidents.form.severityOptions.high}</option>
           </select>
           {errors.severity ? <p className="error-text">{errors.severity.message}</p> : null}
         </div>
@@ -85,10 +86,10 @@ export default function IncidentForm({ mode, initialValues, users, onSubmit, onC
 
       <div className="users-grid">
         <div className="field">
-          <label className="label" htmlFor="incident-assigned-to">Assigned User</label>
+          <label className="label" htmlFor="incident-assigned-to">{fr.incidents.form.assignedUser}</label>
           {users.length > 0 ? (
             <select id="incident-assigned-to" className="select" {...register('assigned_to')}>
-              <option value="">Select a user</option>
+              <option value="">{fr.incidents.form.selectUser}</option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.name} ({user.email})
@@ -102,11 +103,11 @@ export default function IncidentForm({ mode, initialValues, users, onSubmit, onC
         </div>
 
         <div className="field">
-          <label className="label" htmlFor="incident-status">Status</label>
+          <label className="label" htmlFor="incident-status">{fr.incidents.form.status}</label>
           <select id="incident-status" className="select" {...register('status')}>
-            <option value="open">Open</option>
-            <option value="in_progress">In Progress</option>
-            <option value="resolved">Resolved</option>
+            <option value="open">{fr.incidents.form.statusOptions.open}</option>
+            <option value="in_progress">{fr.incidents.form.statusOptions.inProgress}</option>
+            <option value="resolved">{fr.incidents.form.statusOptions.resolved}</option>
           </select>
           {errors.status ? <p className="error-text">{errors.status.message}</p> : null}
         </div>
@@ -114,10 +115,10 @@ export default function IncidentForm({ mode, initialValues, users, onSubmit, onC
 
       <div className="button-row" style={{ justifyContent: 'flex-end' }}>
         <ActionButton type="button" variant="ghost" onClick={onCancel}>
-          Cancel
+          {fr.incidents.form.cancel}
         </ActionButton>
         <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : mode === 'edit' ? 'Update Incident' : 'Report Incident'}
+          {isSubmitting ? fr.incidents.form.saving : mode === 'edit' ? fr.incidents.form.updateButton : fr.incidents.form.reportButton}
         </ActionButton>
       </div>
     </form>

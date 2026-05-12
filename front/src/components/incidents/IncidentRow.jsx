@@ -1,5 +1,6 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import ActionButton from '../ui/ActionButton'
+import { fr } from '../../i18n/fr'
 
 function badgeClassForSeverity(severity) {
   if (severity === 'low') return 'badge badge-success'
@@ -19,7 +20,7 @@ export default function IncidentRow({ incident, onEdit, onDelete }) {
     : '-'
 
   // Properly handle assigned user - ensure it's a name string or "Unassigned"
-  let assignedUserDisplay = 'Unassigned'
+  let assignedUserDisplay = fr.common.status.open || 'Non assigné'
   
   if (incident.assignedUserName) {
     assignedUserDisplay = incident.assignedUserName
@@ -33,7 +34,7 @@ export default function IncidentRow({ incident, onEdit, onDelete }) {
     <tr>
       <td>
         <p style={{ color: 'var(--text-strong)', fontWeight: 700 }}>{incident.title}</p>
-        <p className="muted" style={{ marginTop: 4 }}>{incident.description || 'No description'}</p>
+        <p className="muted" style={{ marginTop: 4 }}>{incident.description || fr.actions.noDescription}</p>
       </td>
       <td>{incident.category}</td>
       <td>
@@ -47,10 +48,10 @@ export default function IncidentRow({ incident, onEdit, onDelete }) {
       <td>
         <div className="table-action-row" style={{ gap: 8 }}>
           <ActionButton variant="ghost" icon={Pencil} onClick={() => onEdit(incident)}>
-            Edit
+            {fr.common.buttons.edit}
           </ActionButton>
           <ActionButton variant="danger" icon={Trash2} onClick={() => onDelete(incident)}>
-            Delete
+            {fr.common.buttons.delete}
           </ActionButton>
         </div>
       </td>

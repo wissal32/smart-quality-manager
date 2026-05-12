@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { AlertTriangle, CheckCircle2, Clock3, Plus } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import ActionButton from '../components/ui/ActionButton'
 import IncidentTable from '../components/incidents/IncidentTable'
 import IncidentForm from '../components/incidents/IncidentForm'
@@ -137,39 +138,39 @@ export default function Incidents() {
   const createMutation = useMutation({
     mutationFn: (payload) => createIncident(payload),
     onSuccess: () => {
-      toast.success('Incident reported successfully.')
+      toast.success(fr.incidents.messages.reportSuccess)
       queryClient.invalidateQueries({ queryKey: ['incidents'] })
       setIsFormOpen(false)
       setEditingIncident(null)
       setFormMode('create')
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to report incident.')
+      toast.error(error?.message || fr.incidents.messages.reportError)
     },
   })
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }) => updateIncident(id, payload),
     onSuccess: () => {
-      toast.success('Incident updated successfully.')
+      toast.success(fr.incidents.messages.updateSuccess)
       queryClient.invalidateQueries({ queryKey: ['incidents'] })
       setIsFormOpen(false)
       setEditingIncident(null)
       setFormMode('create')
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to update incident.')
+      toast.error(error?.message || fr.incidents.messages.updateError)
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteIncident(id),
     onSuccess: () => {
-      toast.success('Incident deleted successfully.')
+      toast.success(fr.incidents.messages.deleteSuccess)
       queryClient.invalidateQueries({ queryKey: ['incidents'] })
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to delete incident.')
+      toast.error(error?.message || fr.incidents.messages.deleteError)
     },
   })
 
@@ -205,7 +206,7 @@ export default function Incidents() {
   }
 
   const handleDelete = (incident) => {
-    const confirmed = window.confirm(`Delete incident "${incident.title}"? This action cannot be undone.`)
+    const confirmed = window.confirm(fr.incidents.messages.deleteConfirm || `${fr.common.messages.confirmation} ${fr.common.messages.cannotUndo}`)
     if (!confirmed) return
     deleteMutation.mutate(incident.id)
   }
@@ -323,13 +324,13 @@ export default function Incidents() {
           <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
             <div className="panel-row" style={{ justifyContent: 'space-between' }}>
               <div>
-                <p className="card-kicker">{formMode === 'edit' ? 'Edit Incident' : 'Report Incident'}</p>
+                <p className="card-kicker">{formMode === 'edit' ? fr.incidents.form.editTitle : fr.incidents.form.reportTitle}</p>
                 <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
-                  {formMode === 'edit' ? 'Update incident details' : 'Create a new incident report'}
+                  {formMode === 'edit' ? fr.incidents.form.updateTitle : fr.incidents.form.reportNewTitle}
                 </h3>
               </div>
               <ActionButton variant="ghost" onClick={closeForm}>
-                Close
+                {fr.common.buttons.close}
               </ActionButton>
             </div>
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 
 export default function Navbar() {
   const navigate = useNavigate()
@@ -12,10 +13,10 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await logout()
-      toast.success('Logged out successfully')
+      toast.success('Déconnecté avec succès')
       navigate('/login', { replace: true })
     } catch {
-      toast.error('Logout failed')
+      toast.error('La déconnexion a échoué')
     }
   }
 
@@ -24,11 +25,11 @@ export default function Navbar() {
       <div>
         <div className="topbar-kicker">
           <PanelTopOpen size={16} style={{ display: 'inline', marginRight: 8 }} />
-          Operations dashboard
+          {fr.dashboard.sections.overview}
         </div>
-        <h1 className="topbar-title">Welcome back{user?.name ? `, ${user.name}` : ''}</h1>
+        <h1 className="topbar-title">Bienvenue {user?.name ? `${user.name}` : ''}</h1>
         <p className="topbar-copy">
-          Monitor quality actions, incidents, ideas, equipment, users and 5S audits from one place.
+          {fr.dashboard.subtitle}
         </p>
       </div>
 
@@ -36,8 +37,8 @@ export default function Navbar() {
         <div className="user-card">
           <ShieldCheck size={18} />
           <div>
-            <div className="user-name">{user?.name || 'Authenticated user'}</div>
-            <div className="user-role">{user?.role || 'Sanctum session'}{user?.department ? ` • ${user.department}` : ''}</div>
+            <div className="user-name">{user?.name || fr.dashboard.auth.authenticatedUser}</div>
+            <div className="user-role">{user?.role || fr.dashboard.auth.sanctumSession}{user?.department ? ` • ${user.department}` : ''}</div>
           </div>
         </div>
 
@@ -49,7 +50,7 @@ export default function Navbar() {
           type="button"
         >
           <LogOut size={16} />
-          Logout
+          {fr.common.buttons.logout}
         </motion.button>
       </div>
     </header>

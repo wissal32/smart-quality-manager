@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Lightbulb, Plus, ThumbsUp } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import ActionButton from '../components/ui/ActionButton'
 import IdeaCard from '../components/ideas/IdeaCard'
 import IdeaForm from '../components/ideas/IdeaForm'
@@ -57,39 +58,39 @@ export default function Ideas() {
   const createMutation = useMutation({
     mutationFn: (payload) => createIdea(payload),
     onSuccess: () => {
-      toast.success('Idea submitted successfully.')
+      toast.success(fr.ideas.messages.submitSuccess)
       queryClient.invalidateQueries({ queryKey: ['ideas'] })
       setIsFormOpen(false)
       setEditingIdea(null)
       setFormMode('create')
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to submit idea.')
+      toast.error(error?.message || fr.ideas.messages.submitError)
     },
   })
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }) => updateIdea(id, payload),
     onSuccess: () => {
-      toast.success('Idea updated successfully.')
+      toast.success(fr.ideas.messages.updateSuccess)
       queryClient.invalidateQueries({ queryKey: ['ideas'] })
       setIsFormOpen(false)
       setEditingIdea(null)
       setFormMode('create')
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to update idea.')
+      toast.error(error?.message || fr.ideas.messages.updateError)
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteIdea(id),
     onSuccess: () => {
-      toast.success('Idea deleted successfully.')
+      toast.success(fr.ideas.messages.deleteSuccess)
       queryClient.invalidateQueries({ queryKey: ['ideas'] })
     },
     onError: (error) => {
-      toast.error(error?.message || 'Failed to delete idea.')
+      toast.error(error?.message || fr.ideas.messages.deleteError)
     },
   })
 
@@ -109,7 +110,7 @@ export default function Ideas() {
       if (context?.previousIdeas) {
         queryClient.setQueryData(['ideas'], context.previousIdeas)
       }
-      toast.error(error?.message || 'Failed to update votes.')
+      toast.error(error?.message || fr.ideas.messages.updateVotesError)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['ideas'] })
@@ -144,7 +145,7 @@ export default function Ideas() {
   }
 
   const handleDelete = (idea) => {
-    const confirmed = window.confirm(`Delete idea "${idea.title}"? This action cannot be undone.`)
+    const confirmed = window.confirm(fr.ideas.messages.deleteConfirm.replace('{title}', idea.title))
     if (!confirmed) return
     deleteMutation.mutate(idea.id)
   }
@@ -156,7 +157,7 @@ export default function Ideas() {
 
   const handleSubmitForm = (values) => {
     if (!user?.id) {
-      toast.error('You must be authenticated to manage ideas.')
+      toast.error(fr.ideas.messages.notAuthenticated)
       return
     }
 
@@ -172,7 +173,7 @@ export default function Ideas() {
     }
 
     if (!editingIdea?.id) {
-      toast.error('No idea selected for update.')
+      toast.error(fr.ideas.messages.noSelection)
       return
     }
 
@@ -190,28 +191,28 @@ export default function Ideas() {
       <motion.section className="page-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="page-row" style={{ justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <div>
-            <p className="page-kicker">Innovation</p>
-            <h2 className="page-title" style={{ marginTop: 8 }}>Ideas Management</h2>
-            <p className="page-copy">Collect improvement ideas and track collaborative voting in real time.</p>
+            <p className="page-kicker">{fr.ideas.title}</p>
+            <h2 className="page-title" style={{ marginTop: 8 }}>{fr.ideas.subtitle}</h2>
+            <p className="page-copy">{fr.ideas.description}</p>
           </div>
           <ActionButton variant="primary" icon={Plus} onClick={openCreateModal}>
-            Submit Idea
+            {fr.ideas.submitIdea}
           </ActionButton>
         </div>
 
         <div className="users-grid" style={{ marginTop: 16 }}>
           <div className="field">
-            <label className="label" htmlFor="idea-search">Search</label>
+            <label className="label" htmlFor="idea-search">Rechercher</label>
             <input
               id="idea-search"
               className="input"
-              placeholder="Search by title or description"
+              placeholder={fr.ideas.filters.search}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
           </div>
           <div className="field">
-            <label className="label">Visible Ideas</label>
+            <label className="label">{fr.ideas.filters.visibleIdeas}</label>
             <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
               {filteredIdeas.length}
             </div>
@@ -221,7 +222,7 @@ export default function Ideas() {
 
       <section className="stats-grid">
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Total Ideas</p>
+          <p className="card-kicker">{fr.ideas.stats.totalIdeas}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.totalIdeas}</p>
             <div className="stat-icon" style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#7dd3fc' }}>
@@ -230,7 +231,7 @@ export default function Ideas() {
           </div>
         </motion.article>
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">My Ideas</p>
+          <p className="card-kicker">{fr.ideas.stats.myIdeas}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.mine}</p>
             <div className="stat-icon" style={{ background: 'rgba(34, 197, 94, 0.16)', color: '#86efac' }}>
@@ -239,7 +240,7 @@ export default function Ideas() {
           </div>
         </motion.article>
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Total Votes</p>
+          <p className="card-kicker">{fr.ideas.stats.totalVotes}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.totalVotes}</p>
             <div className="stat-icon" style={{ background: 'rgba(59, 130, 246, 0.16)', color: '#93c5fd' }}>
@@ -258,7 +259,7 @@ export default function Ideas() {
       >
         {isLoading ? (
           <article className="panel-card">
-            <p className="muted">Loading ideas...</p>
+            <p className="muted">{fr.common.messages.loading}</p>
           </article>
         ) : filteredIdeas.length > 0 ? (
           filteredIdeas.map((idea) => (
@@ -272,7 +273,7 @@ export default function Ideas() {
           ))
         ) : (
           <article className="panel-card">
-            <p className="muted">No ideas found.</p>
+            <p className="muted">{fr.common.messages.noData}</p>
           </article>
         )}
       </section>
@@ -282,13 +283,13 @@ export default function Ideas() {
           <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
             <div className="panel-row" style={{ justifyContent: 'space-between' }}>
               <div>
-                <p className="card-kicker">{formMode === 'edit' ? 'Edit Idea' : 'Submit Idea'}</p>
+                <p className="card-kicker">{formMode === 'edit' ? fr.ideas.form.editTitle : fr.ideas.form.createTitle}</p>
                 <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
-                  {formMode === 'edit' ? 'Update selected idea' : 'Share a new improvement idea'}
+                  {formMode === 'edit' ? fr.ideas.form.editTitle : fr.ideas.form.createTitle}
                 </h3>
               </div>
               <ActionButton variant="ghost" onClick={closeForm}>
-                Close
+                {fr.common.buttons.close}
               </ActionButton>
             </div>
 

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Award, Plus, Eye } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import ActionButton from '../components/ui/ActionButton'
 import AuditTable from '../components/audits/AuditTable'
 import AuditForm from '../components/audits/AuditForm'
@@ -151,14 +152,14 @@ export default function Audits5S() {
   const createMutation = useMutation({
     mutationFn: (payload) => createAudit(payload),
     onSuccess: () => {
-      toast.success('Audit created successfully.')
+      toast.success(fr.audits5s.messages.createdSuccessfully)
       queryClient.invalidateQueries({ queryKey: ['audits'] })
       setIsFormOpen(false)
       setEditingAudit(null)
       setFormMode('create')
     },
     onError: (error) => {
-      const errorMsg = error?.response?.data?.message || error?.message || 'Failed to create audit.'
+      const errorMsg = error?.response?.data?.message || error?.message || fr.audits5s.messages.createError
       toast.error(errorMsg)
     },
   })
@@ -166,14 +167,14 @@ export default function Audits5S() {
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }) => updateAudit(id, payload),
     onSuccess: () => {
-      toast.success('Audit updated successfully.')
+      toast.success(fr.audits5s.messages.updatedSuccessfully)
       queryClient.invalidateQueries({ queryKey: ['audits'] })
       setIsFormOpen(false)
       setEditingAudit(null)
       setFormMode('create')
     },
     onError: (error) => {
-      const errorMsg = error?.response?.data?.message || error?.message || 'Failed to update audit.'
+      const errorMsg = error?.response?.data?.message || error?.message || fr.audits5s.messages.updateError
       toast.error(errorMsg)
     },
   })
@@ -181,11 +182,11 @@ export default function Audits5S() {
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteAudit(id),
     onSuccess: () => {
-      toast.success('Audit deleted successfully.')
+      toast.success(fr.audits5s.messages.deletedSuccessfully)
       queryClient.invalidateQueries({ queryKey: ['audits'] })
     },
     onError: (error) => {
-      const errorMsg = error?.response?.data?.message || error?.message || 'Failed to delete audit.'
+      const errorMsg = error?.response?.data?.message || error?.message || fr.audits5s.messages.deleteError
       toast.error(errorMsg)
     },
   })
@@ -233,14 +234,14 @@ export default function Audits5S() {
 
   const handleDelete = (audit) => {
     const zoneName = audit.zone?.name || `Zone #${audit.zone_id}`
-    const confirmed = window.confirm(`Delete audit for "${zoneName}"? This action cannot be undone.`)
+    const confirmed = window.confirm(fr.audits5s.messages.deleteConfirm.replace('{zoneName}', zoneName) || `${fr.common.messages.confirmation} ${fr.common.messages.cannotUndo}`)
     if (!confirmed) return
     deleteMutation.mutate(audit.id)
   }
 
   const handleSubmitForm = (formData) => {
     if (!user?.id) {
-      toast.error('You must be authenticated to manage audits.')
+      toast.error(fr.audits5s.messages.mustBeAuthenticated)
       return
     }
 
@@ -257,7 +258,7 @@ export default function Audits5S() {
     }
 
     if (!editingAudit?.id) {
-      toast.error('No audit selected for update.')
+      toast.error(fr.audits5s.messages.noAuditSelected)
       return
     }
 
@@ -267,77 +268,214 @@ export default function Audits5S() {
     })
   }
 
+  // return (
+  //   <div className="page-grid">
+  //     <motion.section className="page-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+  //       <div className="page-row" style={{ justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+  //         <div>
+  //           <p className="page-kicker">{fr.audits5s.subtitle}</p>
+  //           <h2 className="page-title" style={{ marginTop: 8 }}>
+  //             {fr.audits5s.title}
+  //           </h2>
+  //           <p className="page-copy">{fr.audits5s.description}</p>
+  //             Evaluate workplace organization using the 5S methodology with automatic score calculation.
+  //           </div>
+  //         </div>
+  //         <ActionButton variant="primary" icon={Plus} onClick={openCreateModal}>
+  //           Create Audit
+  //         </ActionButton>
+  //       </div>
+
+  //       <div className="field" style={{ marginTop: 16 }}>
+  //         <label className="label" htmlFor="audit-search">
+  //           Search
+  //         </label>
+  //         <input
+  //           id="audit-search"
+  //           className="input"
+  //           placeholder="Search by zone or creator"
+  //           value={search}
+  //           onChange={(event) => setSearch(event.target.value)}
+  //         />
+  //       </div>
+  //     </motion.section>
+
+  //     <section className="stats-grid">
+  //       <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+  //         <p className="card-kicker">Total Audits</p>
+  //         <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
+  //           <p className="stat-value" style={{ fontSize: '2.1rem' }}>
+  //             {stats.total}
+  //           </p>
+  //           <div className="stat-icon" style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#93c5fd' }}>
+  //             <Award size={22} />
+  //           </div>
+  //         </div>
+  //       </motion.article>
+  //       <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+  //         <p className="card-kicker">Average Score</p>
+  //         <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
+  //           <p className="stat-value" style={{ fontSize: '2.1rem' }}>
+  //             {stats.averageScore}
+  //           </p>
+  //           <div className="stat-icon" style={{ background: 'rgba(34, 197, 94, 0.16)', color: '#86efac' }}>
+  //             <Award size={22} />
+  //           </div>
+  //         </div>
+  //       </motion.article>
+  //     </section>
+
+  //     <motion.section className="panel-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ padding: 0, overflow: 'hidden' }}>
+  //       <div className="panel-row" style={{ justifyContent: 'space-between', padding: 20, borderBottom: '1px solid var(--panel-border)' }}>
+  //         <h3 style={{ color: 'var(--text-strong)' }}>Audits</h3>
+  //         <span className="muted">{filteredAudits.length} visible items</span>
+  //       </div>
+
+  //       <AuditTable
+  //         audits={filteredAudits}
+  //         isLoading={isLoading}
+  //         onView={openViewModal}
+  //         onEdit={openEditModal}
+  //         onDelete={handleDelete}
+  //       />
+  //     </motion.section>
+
+
+
   return (
-    <div className="page-grid">
-      <motion.section className="page-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="page-row" style={{ justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <div>
-            <p className="page-kicker">Quality Management</p>
-            <h2 className="page-title" style={{ marginTop: 8 }}>
-              5S Audits
-            </h2>
-            <p className="page-copy">
-              Evaluate workplace organization using the 5S methodology with automatic score calculation.
-            </p>
-          </div>
-          <ActionButton variant="primary" icon={Plus} onClick={openCreateModal}>
-            Create Audit
-          </ActionButton>
+  <div className="page-grid">
+    <motion.section
+      className="page-card"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div
+        className="page-row"
+        style={{
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+        }}
+      >
+        <div>
+          <p className="page-kicker">{fr.audits5s.subtitle}</p>
+
+          <h2 className="page-title" style={{ marginTop: 8 }}>
+            {fr.audits5s.title}
+          </h2>
+
+          <p className="page-copy">
+            {fr.audits5s.description}
+          </p>
         </div>
 
-        <div className="field" style={{ marginTop: 16 }}>
-          <label className="label" htmlFor="audit-search">
-            Search
-          </label>
-          <input
-            id="audit-search"
-            className="input"
-            placeholder="Search by zone or creator"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-        </div>
-      </motion.section>
+        <ActionButton variant="primary" icon={Plus} onClick={openCreateModal}>
+          {fr.audits5s.createAudit}
+        </ActionButton>
+      </div>
 
-      <section className="stats-grid">
-        <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Total Audits</p>
-          <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
-            <p className="stat-value" style={{ fontSize: '2.1rem' }}>
-              {stats.total}
-            </p>
-            <div className="stat-icon" style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#93c5fd' }}>
-              <Award size={22} />
-            </div>
-          </div>
-        </motion.article>
-        <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Average Score</p>
-          <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
-            <p className="stat-value" style={{ fontSize: '2.1rem' }}>
-              {stats.averageScore}
-            </p>
-            <div className="stat-icon" style={{ background: 'rgba(34, 197, 94, 0.16)', color: '#86efac' }}>
-              <Award size={22} />
-            </div>
-          </div>
-        </motion.article>
-      </section>
+      <div className="field" style={{ marginTop: 16 }}>
+        <label className="label" htmlFor="audit-search">
+          {fr.common.buttons.search || 'Rechercher'}
+        </label>
 
-      <motion.section className="panel-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ padding: 0, overflow: 'hidden' }}>
-        <div className="panel-row" style={{ justifyContent: 'space-between', padding: 20, borderBottom: '1px solid var(--panel-border)' }}>
-          <h3 style={{ color: 'var(--text-strong)' }}>Audits</h3>
-          <span className="muted">{filteredAudits.length} visible items</span>
-        </div>
-
-        <AuditTable
-          audits={filteredAudits}
-          isLoading={isLoading}
-          onView={openViewModal}
-          onEdit={openEditModal}
-          onDelete={handleDelete}
+        <input
+          id="audit-search"
+          className="input"
+          placeholder={fr.audits5s.filters.search}
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
         />
-      </motion.section>
+      </div>
+    </motion.section>
+
+    <section className="stats-grid">
+      <motion.article
+        className="metric-card"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p className="card-kicker">{fr.audits5s.stats.totalAudits}</p>
+
+        <div
+          className="panel-row"
+          style={{ justifyContent: "space-between", marginTop: 10 }}
+        >
+          <p className="stat-value" style={{ fontSize: "2.1rem" }}>
+            {stats.total}
+          </p>
+
+          <div
+            className="stat-icon"
+            style={{
+              background: "rgba(56, 189, 248, 0.16)",
+              color: "#93c5fd",
+            }}
+          >
+            <Award size={22} />
+          </div>
+        </div>
+      </motion.article>
+
+      <motion.article
+        className="metric-card"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p className="card-kicker">{fr.audits5s.stats.averageScore}</p>
+
+        <div
+          className="panel-row"
+          style={{ justifyContent: "space-between", marginTop: 10 }}
+        >
+          <p className="stat-value" style={{ fontSize: "2.1rem" }}>
+            {stats.averageScore}
+          </p>
+
+          <div
+            className="stat-icon"
+            style={{
+              background: "rgba(34, 197, 94, 0.16)",
+              color: "#86efac",
+            }}
+          >
+            <Award size={22} />
+          </div>
+        </div>
+      </motion.article>
+    </section>
+
+    <motion.section
+      className="panel-card"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{ padding: 0, overflow: "hidden" }}
+    >
+      <div
+        className="panel-row"
+        style={{
+          justifyContent: "space-between",
+          padding: 20,
+          borderBottom: "1px solid var(--panel-border)",
+        }}
+      >
+        <h3 style={{ color: "var(--text-strong)" }}>{fr.audits5s.title}</h3>
+
+        <span className="muted">
+          {filteredAudits.length} {fr.audits5s.visibleItems || 'éléments visibles'}
+        </span>
+      </div>
+
+      <AuditTable
+        audits={filteredAudits}
+        isLoading={isLoading}
+        onView={openViewModal}
+        onEdit={openEditModal}
+        onDelete={handleDelete}
+      />
+    </motion.section>
+  </div>
+);
 
       {isFormOpen ? (
         <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Audit form dialog">
@@ -489,6 +627,6 @@ export default function Audits5S() {
           </motion.section>
         </div>
       ) : null}
-    </div>
-  )
+ 
+  
 }

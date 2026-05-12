@@ -1,17 +1,18 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
+import { fr } from '../../i18n/fr'
 import ActionButton from '../ui/ActionButton'
 import AuditScoreDisplay from './AuditScoreDisplay'
 import AuditPhotoUploader from './AuditPhotoUploader'
 
 const auditSchema = z.object({
-  zone_id: z.coerce.number().int().positive('Zone is required.'),
-  tri: z.coerce.number().int().min(0).max(5, 'Score must be between 0 and 5.'),
-  ranger: z.coerce.number().int().min(0).max(5, 'Score must be between 0 and 5.'),
-  nettoyer: z.coerce.number().int().min(0).max(5, 'Score must be between 0 and 5.'),
-  standardiser: z.coerce.number().int().min(0).max(5, 'Score must be between 0 and 5.'),
-  maintenir: z.coerce.number().int().min(0).max(5, 'Score must be between 0 and 5.'),
+  zone_id: z.coerce.number().int().positive(fr.audits5s.form.zoneValidation),
+  tri: z.coerce.number().int().min(0).max(5, fr.validation.scoreInvalid),
+  ranger: z.coerce.number().int().min(0).max(5, fr.validation.scoreInvalid),
+  nettoyer: z.coerce.number().int().min(0).max(5, fr.validation.scoreInvalid),
+  standardiser: z.coerce.number().int().min(0).max(5, fr.validation.scoreInvalid),
+  maintenir: z.coerce.number().int().min(0).max(5, fr.validation.scoreInvalid),
   photos_before: z.any().optional(),
   photos_after: z.any().optional(),
 })
@@ -103,11 +104,11 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
     <form className="auth-form" onSubmit={handleSubmit(submitHandler)}>
       <div className="field">
         <label className="label" htmlFor="audit-zone-id">
-          Zone
+          {fr.audits5s.form.zone}
         </label>
         {zones.length > 0 ? (
           <select id="audit-zone-id" className="select" {...register('zone_id')}>
-            <option value="">Select a zone</option>
+            <option value="">{fr.audits5s.form.selectZone}</option>
             {zones.map((zone) => (
               <option key={zone.id} value={zone.id}>
                 {zone.name}
@@ -123,7 +124,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
         <div className="field">
           <label className="label" htmlFor="audit-tri">
-            Tri (Sort) - 1-5
+            {fr.audits5s.form.tri}
           </label>
           <input
             id="audit-tri"
@@ -139,7 +140,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
 
         <div className="field">
           <label className="label" htmlFor="audit-ranger">
-            Ranger (Order) - 1-5
+            {fr.audits5s.form.ranger}
           </label>
           <input
             id="audit-ranger"
@@ -155,7 +156,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
 
         <div className="field">
           <label className="label" htmlFor="audit-nettoyer">
-            Nettoyer (Shine) - 1-5
+            {fr.audits5s.form.nettoyer}
           </label>
           <input
             id="audit-nettoyer"
@@ -171,7 +172,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
 
         <div className="field">
           <label className="label" htmlFor="audit-standardiser">
-            Standardiser - 1-5
+            {fr.audits5s.form.standardiser}
           </label>
           <input
             id="audit-standardiser"
@@ -187,7 +188,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
 
         <div className="field">
           <label className="label" htmlFor="audit-maintenir">
-            Maintenir (Sustain) - 1-5
+            {fr.audits5s.form.maintenir}
           </label>
           <input
             id="audit-maintenir"
@@ -211,7 +212,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
       />
 
       <div className="field">
-        <label className="label">Photos Before</label>
+        <label className="label">{fr.audits5s.form.photoBefore || 'Photos Avant'}</label>
         <Controller
           name="photos_before"
           control={control}
@@ -228,7 +229,7 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
       </div>
 
       <div className="field">
-        <label className="label">Photos After</label>
+        <label className="label">{fr.audits5s.form.photoAfter || 'Photos Après'}</label>
         <Controller
           name="photos_after"
           control={control}
@@ -246,10 +247,10 @@ export default function AuditForm({ mode, initialValues, zones, onSubmit, onCanc
 
       <div className="button-row" style={{ justifyContent: 'flex-end' }}>
         <ActionButton type="button" variant="ghost" onClick={onCancel}>
-          Cancel
+          {fr.audits5s.form.cancel}
         </ActionButton>
         <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : mode === 'edit' ? 'Update Audit' : 'Create Audit'}
+          {isSubmitting ? fr.audits5s.form.saving || fr.common.messages.saving : mode === 'edit' ? fr.audits5s.form.updateButton : fr.audits5s.form.createButton}
         </ActionButton>
       </div>
     </form>

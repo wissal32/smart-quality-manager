@@ -57,7 +57,7 @@ class FiveSAuditController extends Controller
         $audit = FiveSAudit::create($validated)->load(['zone', 'createdBy']);
 
         return response()->json([
-            'message' => '5S audit created successfully.',
+            'message' => 'Audit 5S créé avec succès.',
             'data' => $audit,
         ], 201);
     }
@@ -109,7 +109,7 @@ class FiveSAuditController extends Controller
         $five_s_audit->update($validated);
 
         return response()->json([
-            'message' => '5S audit updated successfully.',
+            'message' => 'Audit 5S mis à jour avec succès.',
             'data' => $five_s_audit->fresh()->load(['zone', 'createdBy']),
         ]);
     }
@@ -119,7 +119,7 @@ class FiveSAuditController extends Controller
         $five_s_audit->delete();
 
         return response()->json([
-            'message' => '5S audit deleted successfully.',
+            'message' => 'Audit 5S supprimé avec succès.',
         ]);
     }
 }

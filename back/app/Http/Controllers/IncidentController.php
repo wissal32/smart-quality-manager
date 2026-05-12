@@ -33,7 +33,7 @@ class IncidentController extends Controller
         $incident = Incident::create($validated)->load(['reportedBy', 'assignedTo']);
 
         return response()->json([
-            'message' => 'Incident created successfully.',
+            'message' => 'Incident créé avec succès.',
             'data' => $incident,
         ], 201);
     }
@@ -62,7 +62,7 @@ class IncidentController extends Controller
         $incident->update($validated);
 
         return response()->json([
-            'message' => 'Incident updated successfully.',
+            'message' => 'Incident mis à jour avec succès.',
             'data' => $incident->fresh()->load(['reportedBy', 'assignedTo']),
         ]);
     }
@@ -72,7 +72,7 @@ class IncidentController extends Controller
         $incident->delete();
 
         return response()->json([
-            'message' => 'Incident deleted successfully.',
+            'message' => 'Incident supprimé avec succès.',
         ]);
     }
 }

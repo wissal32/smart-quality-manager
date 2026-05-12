@@ -37,7 +37,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'User created successfully.',
+            'message' => 'Utilisateur créé avec succès.',
             'data' => $user,
         ], 201);
     }
@@ -69,7 +69,7 @@ class UserController extends Controller
         $user->update($payload);
 
         return response()->json([
-            'message' => 'User updated successfully.',
+            'message' => 'Utilisateur mis à jour avec succès.',
             'data' => $user->fresh(),
         ]);
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
 
         if ($request->user()?->id === $user->id) {
             return response()->json([
-                'message' => 'You cannot delete your own account.',
+                'message' => 'Vous ne pouvez pas supprimer votre propre compte.',
             ], 422);
         }
 
@@ -94,7 +94,7 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'message' => 'User deleted successfully.',
+            'message' => 'Utilisateur supprimé avec succès.',
         ]);
     }
 }

@@ -33,7 +33,7 @@ class AuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'message' => 'User registered successfully.',
+            'message' => 'Utilisateur enregistré avec succès.',
             'user' => $user,
             'token' => $token,
         ], 201);
@@ -51,7 +51,7 @@ class AuthController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'message' => 'The given data was invalid.',
+                    'message' => 'Les données fournies ne sont pas valides.',
                     'errors' => $validator->errors(),
                 ], 422);
             }
@@ -62,13 +62,13 @@ class AuthController extends Controller
 
             if (! $user) {
                 return response()->json([
-                    'message' => 'User not found.',
+                    'message' => 'Utilisateur non trouvé.',
                 ], 404);
             }
 
             if (! is_string($user->password) || $user->password === '') {
                 return response()->json([
-                    'message' => 'Stored password is invalid.',
+                    'message' => "Le mot de passe stocké n'est pas valide.",
                 ], 500);
             }
 
@@ -81,7 +81,7 @@ class AuthController extends Controller
                     report($throwable);
 
                     return response()->json([
-                        'message' => 'Unable to verify the stored password hash.',
+                        'message' => 'Impossible de vérifier le hachage du mot de passe stocké.',
                     ], 500);
                 }
             } elseif (hash_equals($user->password, $credentials['password'])) {
@@ -94,7 +94,7 @@ class AuthController extends Controller
 
             if (! $passwordMatches) {
                 return response()->json([
-                    'message' => 'Invalid password.',
+                    'message' => 'Mot de passe invalide.',
                 ], 401);
             }
 
@@ -108,7 +108,7 @@ class AuthController extends Controller
             report($throwable);
 
             return response()->json([
-                'message' => 'Login failed due to an internal error.',
+                'message' => "Échec de la connexion en raison d'une erreur interne.",
             ], 500);
         }
     }
@@ -125,7 +125,7 @@ class AuthController extends Controller
         $request->user()?->currentAccessToken()?->delete();
 
         return response()->json([
-            'message' => 'Logged out successfully.',
+            'message' => 'Déconnecté avec succès.',
         ]);
     }
 }

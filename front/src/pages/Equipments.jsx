@@ -5,13 +5,14 @@ import { Edit3, Plus, Trash2, Wrench } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
+import { fr } from '../i18n/fr'
 import api from '../services/api'
 import { getStatusBadgeClass } from '../utils/stats'
 
 const equipmentSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  type: z.string().min(1, 'Type is required'),
-  serial_number: z.string().min(1, 'Serial number is required'),
+  name: z.string().min(1, fr.equipments.form.nameValidation),
+  type: z.string().min(1, fr.equipments.form.typeValidation),
+  serial_number: z.string().min(1, fr.equipments.form.serialNumberValidation),
   status: z.enum(['working', 'broken', 'maintenance']),
   qr_code: z.string().optional().or(z.literal('')),
   last_maintenance: z.string().optional().or(z.literal('')),
@@ -59,13 +60,13 @@ export default function Equipments() {
       return data.data
     },
     onSuccess: () => {
-      toast.success(editingEquipment ? 'Equipment updated' : 'Equipment created')
+      toast.success(editingEquipment ? fr.equipments.messages.equipmentUpdated : fr.equipments.messages.equipmentCreated)
       queryClient.invalidateQueries({ queryKey: ['equipments'] })
       setEditingEquipment(null)
       reset(defaultValues)
     },
     onError: (error) => {
-      toast.error(error?.message || 'Unable to save equipment')
+      toast.error(error?.message || fr.equipments.messages.unableToSave)
     },
   })
 
@@ -74,11 +75,11 @@ export default function Equipments() {
       await api.delete(`/equipments/${id}`)
     },
     onSuccess: () => {
-      toast.success('Equipment deleted')
+      toast.success(fr.equipments.messages.deleteSuccess)
       queryClient.invalidateQueries({ queryKey: ['equipments'] })
     },
     onError: (error) => {
-      toast.error(error?.message || 'Unable to delete equipment')
+      toast.error(error?.message || fr.equipments.messages.unableToDelete)
     },
   })
 

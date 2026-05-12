@@ -1,5 +1,6 @@
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 
 export default function ProtectedRoute({ children, allowedRoles = [] }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -11,9 +12,9 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     return (
       <div className="auth-page">
         <div className="auth-card glass" style={{ textAlign: 'center' }}>
-          <div className="auth-kicker">Loading</div>
-          <h2 className="auth-title">Restoring session</h2>
-          <p className="auth-copy">Checking your Sanctum token before opening the dashboard.</p>
+          <div className="auth-kicker">{fr.common.messages.loading}</div>
+          <h2 className="auth-title">{fr.common.messages.restoringSession}</h2>
+          <p className="auth-copy">{fr.common.messages.checkingToken}</p>
         </div>
       </div>
     )
@@ -27,14 +28,14 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     return (
       <div className="auth-page">
         <div className="auth-card glass" style={{ textAlign: 'center' }}>
-          <div className="auth-kicker">Access denied</div>
-          <h2 className="auth-title">You do not have permission</h2>
+          <div className="auth-kicker">{fr.common.messages.accessDenied}</div>
+          <h2 className="auth-title">{fr.common.messages.permissionDenied}</h2>
           <p className="auth-copy">
-            This module is restricted to specific roles in Smart Quality Manager.
+            {fr.common.messages.restrictedModule}
           </p>
           <div style={{ marginTop: 20 }}>
             <Link className="btn btn-primary" to="/dashboard">
-              Go to dashboard
+              {fr.common.buttons.goDashboard}
             </Link>
           </div>
         </div>

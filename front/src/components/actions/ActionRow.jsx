@@ -1,23 +1,24 @@
 import ActionButton from '../ui/ActionButton'
 import StatusBadge from '../ui/StatusBadge'
 import { Pencil, Trash2 } from 'lucide-react'
+import { fr } from '../../i18n/fr'
 
 const priorityLabels = {
-  low: 'Low',
-  medium: 'Medium',
-  high: 'High',
+  low: fr.actions.priorities.low,
+  medium: fr.actions.priorities.medium,
+  high: fr.actions.priorities.high,
 }
 
 export default function ActionRow({ action, onEdit, onDelete, onStatusChange }) {
   const deadlineLabel = action.deadline
     ? new Date(action.deadline).toLocaleDateString()
-    : 'No deadline'
+    : fr.actions.form.noDeadline
 
   return (
     <tr>
       <td>
         <p style={{ color: 'var(--text-strong)', fontWeight: 700 }}>{action.title}</p>
-        <p className="muted" style={{ marginTop: 4 }}>{action.description || 'No description'}</p>
+        <p className="muted" style={{ marginTop: 4 }}>{action.description || fr.actions.noDescription}</p>
       </td>
       <td>
         <StatusBadge status={action.status} label={action.statusLabel} />
@@ -38,18 +39,18 @@ export default function ActionRow({ action, onEdit, onDelete, onStatusChange }) 
           aria-label={`Change status for ${action.title}`}
           style={{ minWidth: 160 }}
         >
-          <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>à
+          <option value="pending">{fr.actions.filters.status.pending}</option>
+          <option value="in_progress">{fr.actions.filters.status.inProgress}</option>
+          <option value="completed">{fr.actions.filters.status.completed}</option>
+        </select>
       </td>
       <td>
         <div className="table-action-row" style={{ gap: 8 }}>
           <ActionButton variant="ghost" icon={Pencil} onClick={() => onEdit(action)}>
-            Edit
+            {fr.common.buttons.edit}
           </ActionButton>
           <ActionButton variant="danger" icon={Trash2} onClick={() => onDelete(action)}>
-            Delete
+            {fr.common.buttons.delete}
           </ActionButton>
         </div>
       </td>

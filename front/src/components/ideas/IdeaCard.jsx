@@ -1,4 +1,5 @@
 import { Pencil, ThumbsDown, ThumbsUp, Trash2, User } from 'lucide-react'
+import { fr } from '../../i18n/fr'
 import ActionButton from '../ui/ActionButton'
 
 export default function IdeaCard({ idea, onEdit, onDelete, onVote }) {
@@ -9,13 +10,13 @@ export default function IdeaCard({ idea, onEdit, onDelete, onVote }) {
   return (
     <article className="panel-card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div className="panel-row" style={{ justifyContent: 'space-between' }}>
-        <span className="badge badge-info">Votes: {idea.votes || 0}</span>
+        <span className="badge badge-info">{fr.ideas.card.votes}: {idea.votes || 0}</span>
         <span className="muted" style={{ fontSize: '0.85rem' }}>{createdAtLabel}</span>
       </div>
 
       <div>
         <h3 style={{ color: 'var(--text-strong)' }}>{idea.title}</h3>
-        <p className="muted" style={{ marginTop: 8 }}>{idea.description || 'No description'}</p>
+        <p className="muted" style={{ marginTop: 8 }}>{idea.description || fr.ideas.card.noDescription}</p>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -32,26 +33,26 @@ export default function IdeaCard({ idea, onEdit, onDelete, onVote }) {
           <User size={14} />
         </div>
         <p className="muted" style={{ fontSize: '0.9rem' }}>
-          {idea.authorName || `User #${idea.created_by}`}
+          {idea.authorName || `${fr.ideas.card.user} #${idea.created_by}`}
         </p>
       </div>
 
       <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 'auto' }}>
         <div className="panel-row" style={{ gap: 8 }}>
           <ActionButton variant="ghost" icon={ThumbsUp} onClick={() => onVote(idea, 1)}>
-            Upvote
+            {fr.ideas.card.upvote}
           </ActionButton>
           <ActionButton variant="ghost" icon={ThumbsDown} onClick={() => onVote(idea, -1)}>
-            Downvote
+            {fr.ideas.card.downvote}
           </ActionButton>
         </div>
 
         <div className="panel-row" style={{ gap: 8 }}>
           <ActionButton variant="ghost" icon={Pencil} onClick={() => onEdit(idea)}>
-            Edit
+            {fr.common.buttons.edit}
           </ActionButton>
           <ActionButton variant="danger" icon={Trash2} onClick={() => onDelete(idea)}>
-            Delete
+            {fr.common.buttons.delete}
           </ActionButton>
         </div>
       </div>

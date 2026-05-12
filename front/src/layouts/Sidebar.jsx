@@ -1,15 +1,16 @@
 import { NavLink } from 'react-router-dom'
 import { Activity, ClipboardList, Gauge, Inbox, Layers3, LifeBuoy, Users, Wrench } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import logo from '../assets/wii.svg'
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: Gauge },
-  { to: '/equipments', label: 'Equipments', icon: Wrench },
-  { to: '/actions', label: 'Actions', icon: ClipboardList },
-  { to: '/incidents', label: 'Incidents', icon: Activity },
-  { to: '/ideas', label: 'Ideas', icon: Inbox },
-  { to: '/audits', label: '5S Audits', icon: Layers3 },
+  { to: '/dashboard', label: fr.navigation.dashboard, icon: Gauge },
+  { to: '/equipments', label: fr.navigation.equipments, icon: Wrench },
+  { to: '/actions', label: fr.navigation.actions, icon: ClipboardList },
+  { to: '/incidents', label: fr.navigation.incidents, icon: Activity },
+  { to: '/ideas', label: fr.navigation.ideas, icon: Inbox },
+  { to: '/audits', label: fr.navigation.audits5s, icon: Layers3 },
 ]
 
 export default function Sidebar() {
@@ -22,9 +23,9 @@ export default function Sidebar() {
           <img src={logo} alt="Smart Quality Manager Logo" className="sidebar-logo" />
         </div>
         <div>
-          <div className="sidebar-title">Smart Quality Manager</div>
+          <div className="sidebar-title">{fr.app.title}</div>
           <div className="muted" style={{ fontSize: '0.88rem', marginTop: 2 }}>
-            Quality operations console
+            {fr.app.subtitle}
           </div>
         </div>
       </div>
@@ -51,7 +52,7 @@ export default function Sidebar() {
             }
           >
             <Users size={18} />
-            <span>Users</span>
+            <span>{fr.navigation.users}</span>
           </NavLink>
         )}
       </nav>

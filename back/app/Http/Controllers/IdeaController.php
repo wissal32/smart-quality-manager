@@ -29,7 +29,7 @@ class IdeaController extends Controller
         $idea = Idea::create($validated)->load('createdBy');
 
         return response()->json([
-            'message' => 'Idea created successfully.',
+            'message' => 'Idée créée avec succès.',
             'data' => $idea,
         ], 201);
     }
@@ -54,7 +54,7 @@ class IdeaController extends Controller
         $idea->update($validated);
 
         return response()->json([
-            'message' => 'Idea updated successfully.',
+            'message' => 'Idée mise à jour avec succès.',
             'data' => $idea->fresh()->load('createdBy'),
         ]);
     }
@@ -64,7 +64,7 @@ class IdeaController extends Controller
         $idea->delete();
 
         return response()->json([
-            'message' => 'Idea deleted successfully.',
+            'message' => 'Idée supprimée avec succès.',
         ]);
     }
 }

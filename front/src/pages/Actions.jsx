@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle2, Clock3, ListChecks, Plus } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import { createAction, deleteAction, listActions, updateAction } from '../services/actionService.ts'
 import { listUsers } from '../services/userService'
 import ActionButton from '../components/ui/ActionButton'
@@ -20,9 +21,9 @@ const defaultFormValues = {
 }
 
 const statusLabels = {
-  pending: 'Pending',
-  in_progress: 'In Progress',
-  completed: 'Completed',
+  pending: fr.actions.filters.status.pending,
+  in_progress: fr.actions.filters.status.inProgress,
+  completed: fr.actions.filters.status.completed,
 }
 
 function toUiStatus(status) {
@@ -262,21 +263,21 @@ export default function Actions() {
       <motion.section className="page-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="page-row" style={{ justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <div>
-            <p className="page-kicker">Quality Execution</p>
-            <h2 className="page-title" style={{ marginTop: 8 }}>Actions Management</h2>
-            <p className="page-copy">Create, monitor, and close corrective actions connected to Laravel API data.</p>
+            <p className="page-kicker">{fr.actions.title}</p>
+            <h2 className="page-title" style={{ marginTop: 8 }}>{fr.actions.subtitle}</h2>
+            <p className="page-copy">{fr.actions.description}</p>
           </div>
           <ActionButton variant="primary" icon={Plus} onClick={openCreateModal}>
-            New Action
+            {fr.actions.newAction}
           </ActionButton>
         </div>
 
         <div className="feature-row" style={{ marginTop: 18 }}>
           {[
-            { value: 'all', label: 'All' },
-            { value: 'pending', label: 'Pending' },
-            { value: 'in_progress', label: 'In Progress' },
-            { value: 'completed', label: 'Completed' },
+            { value: 'all', label: fr.actions.filters.status.all },
+            { value: 'pending', label: fr.actions.filters.status.pending },
+            { value: 'in_progress', label: fr.actions.filters.status.inProgress },
+            { value: 'completed', label: fr.actions.filters.status.completed },
           ].map((item) => (
             <button
               key={item.value}
@@ -291,24 +292,24 @@ export default function Actions() {
 
         <div className="users-grid" style={{ marginTop: 16 }}>
           <div className="field">
-            <label className="label" htmlFor="search-actions">Search</label>
+            <label className="label" htmlFor="search-actions">{fr.common.buttons.save}</label>
             <input
               id="search-actions"
               className="input"
-              placeholder="Search by title or description"
+              placeholder={fr.actions.filters.search}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
           </div>
           <div className="field">
-            <label className="label" htmlFor="assignee-filter">Assigned User</label>
+            <label className="label" htmlFor="assignee-filter">{fr.actions.filters.assignedUser}</label>
             <select
               id="assignee-filter"
               className="select"
               value={assigneeFilter}
               onChange={(event) => setAssigneeFilter(event.target.value)}
             >
-              <option value="all">All users</option>
+              <option value="all">{fr.actions.filters.allUsers}</option>
               {users.map((item) => (
                 <option key={item.id} value={String(item.id)}>
                   {item.name}
@@ -321,7 +322,7 @@ export default function Actions() {
 
       <section className="stats-grid">
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Total</p>
+          <p className="card-kicker">{fr.actions.stats.total}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.total}</p>
             <div className="stat-icon" style={{ background: 'rgba(56, 189, 248, 0.16)', color: '#7dd3fc' }}>
@@ -330,7 +331,7 @@ export default function Actions() {
           </div>
         </motion.article>
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">In Progress</p>
+          <p className="card-kicker">{fr.actions.stats.inProgress}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.inProgress + stats.pending}</p>
             <div className="stat-icon" style={{ background: 'rgba(59, 130, 246, 0.16)', color: '#93c5fd' }}>
@@ -339,7 +340,7 @@ export default function Actions() {
           </div>
         </motion.article>
         <motion.article className="metric-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="card-kicker">Completion</p>
+          <p className="card-kicker">{fr.actions.stats.completion}</p>
           <div className="panel-row" style={{ justifyContent: 'space-between', marginTop: 10 }}>
             <p className="stat-value" style={{ fontSize: '2.1rem' }}>{stats.completionRate}%</p>
             <div className="stat-icon" style={{ background: 'rgba(34, 197, 94, 0.16)', color: '#86efac' }}>
@@ -351,8 +352,8 @@ export default function Actions() {
 
       <motion.section className="panel-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ padding: 0, overflow: 'hidden' }}>
         <div className="panel-row" style={{ justifyContent: 'space-between', padding: 20, borderBottom: '1px solid var(--panel-border)' }}>
-          <h3 style={{ color: 'var(--text-strong)' }}>Action List</h3>
-          <span className="muted">{filteredActions.length} visible items</span>
+          <h3 style={{ color: 'var(--text-strong)' }}>{fr.actions.actionList.title}</h3>
+          <span className="muted">{filteredActions.length} {fr.actions.actionList.visibleItems}</span>
         </div>
         <ActionTable
           actions={filteredActions}

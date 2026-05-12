@@ -31,7 +31,7 @@ class ActionController extends Controller
         $action = Action::create($validated)->load(['assignedTo', 'createdBy']);
 
         return response()->json([
-            'message' => 'Action created successfully.',
+            'message' => 'Action créée avec succès.',
             'data' => $action,
         ], 201);
     }
@@ -58,7 +58,7 @@ class ActionController extends Controller
         $action->update($validated);
 
         return response()->json([
-            'message' => 'Action updated successfully.',
+            'message' => 'Action mise à jour avec succès.',
             'data' => $action->fresh()->load(['assignedTo', 'createdBy']),
         ]);
     }
@@ -68,7 +68,7 @@ class ActionController extends Controller
         $action->delete();
 
         return response()->json([
-            'message' => 'Action deleted successfully.',
+            'message' => 'Action supprimée avec succès.',
         ]);
     }
 }

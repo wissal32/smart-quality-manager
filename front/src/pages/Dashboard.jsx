@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Activity, Archive, Clock3, ShieldCheck, Wrench, AlertTriangle, CheckCircle2, TrendingUp } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import { fr } from '../i18n/fr'
 import {
   ArcElement,
   BarElement,
@@ -45,7 +46,7 @@ export default function Dashboard() {
   // Chart: Actions by Status
   const actionsStatusChart = useMemo(
     () => ({
-      labels: ['To Do', 'In Progress', 'Completed'],
+      labels: [fr.dashboard.statuses.toDo, fr.dashboard.statuses.inProgress, fr.dashboard.statuses.completed],
       datasets: [
         {
           label: 'Actions',
@@ -62,7 +63,7 @@ export default function Dashboard() {
   // Chart: Incidents by Severity
   const incidentsSeverityChart = useMemo(
     () => ({
-      labels: ['Low', 'Medium', 'High'],
+      labels: [fr.dashboard.severity.low, fr.dashboard.severity.medium, fr.dashboard.severity.high],
       datasets: [
         {
           label: 'Incidents',
@@ -77,10 +78,10 @@ export default function Dashboard() {
   )
 
   const statCards = [
-    { label: 'Total Actions', value: summary.actions, icon: Activity, tone: '#38bdf8' },
-    { label: 'Open Incidents', value: summary.incidents, icon: AlertTriangle, tone: '#f59e0b' },
-    { label: 'Ideas Submitted', value: summary.ideas, icon: TrendingUp, tone: '#22c55e' },
-    { label: 'Equipments', value: summary.equipments, icon: Wrench, tone: '#a78bfa' },
+    { label: fr.dashboard.stats.totalActions, value: summary.actions, icon: Activity, tone: '#38bdf8' },
+    { label: fr.dashboard.stats.openIncidents, value: summary.incidents, icon: AlertTriangle, tone: '#f59e0b' },
+    { label: fr.dashboard.stats.ideasSubmitted, value: summary.ideas, icon: TrendingUp, tone: '#22c55e' },
+    { label: fr.dashboard.stats.equipments, value: summary.equipments, icon: Wrench, tone: '#a78bfa' },
   ]
 
   const formatDate = (dateString) => {
@@ -113,12 +114,12 @@ export default function Dashboard() {
     return (
       <div className="page-grid">
         <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Error</div>
+          <div className="card-kicker">Erreur</div>
           <h2 className="page-title" style={{ marginTop: 8 }}>
-            Failed to load dashboard data
+            Impossible de charger les données du tableau de bord
           </h2>
           <p className="panel-copy">
-            There was an error fetching data from the backend. Please check your connection and try refreshing the page.
+            Une erreur s'est produite lors de la récupération des données du backend. Veuillez vérifier votre connexion et actualiser la page.
           </p>
         </motion.article>
       </div>
@@ -151,13 +152,13 @@ export default function Dashboard() {
 
       <section className="charts-grid">
         <motion.article className="chart-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Overview</div>
+          <div className="card-kicker">{fr.dashboard.sections.overview}</div>
           <h2 className="page-title" style={{ marginTop: 8 }}>
-            Actions by Status
+            {fr.dashboard.sections.actionsByStatus}
           </h2>
           <div style={{ marginTop: 20 }}>
             {isLoading ? (
-              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>Loading chart...</div>
+              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>{fr.dashboard.charts.loadingChart}</div>
             ) : (
               <Bar
                 data={actionsStatusChart}
@@ -175,13 +176,13 @@ export default function Dashboard() {
         </motion.article>
 
         <motion.article className="chart-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Risk Assessment</div>
+          <div className="card-kicker">{fr.dashboard.sections.riskAssessment}</div>
           <h2 className="page-title" style={{ marginTop: 8 }}>
-            Incidents by Severity
+            {fr.dashboard.sections.incidentsBySeverity}
           </h2>
           <div style={{ marginTop: 20 }}>
             {isLoading ? (
-              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>Loading chart...</div>
+              <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>{fr.dashboard.charts.loadingChart}</div>
             ) : (
               <Bar
                 data={incidentsSeverityChart}
@@ -199,36 +200,36 @@ export default function Dashboard() {
         </motion.article>
 
         <motion.article className="chart-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Quality score</div>
+          <div className="card-kicker">{fr.dashboard.sections.qualityScore}</div>
           <h2 className="page-title" style={{ marginTop: 8 }}>
-            Average 5S Score
+            {fr.dashboard.sections.average5sScore}
           </h2>
           <div className="chart-center">
             <div style={{ fontSize: '4rem', fontWeight: 900, color: 'var(--text-strong)', lineHeight: 1 }}>
               {isLoading ? '...' : summary.averageScore.toFixed(2)}
             </div>
             <p className="muted" style={{ textAlign: 'center', maxWidth: '28ch', marginTop: 8 }}>
-              Out of 25 points
+              {fr.dashboard.sections.outOf25}
             </p>
           </div>
         </motion.article>
       </section>
 
       <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="card-kicker">Recent Activity</div>
+        <div className="card-kicker">{fr.dashboard.recentActivity.title}</div>
         <h2 className="page-title" style={{ marginTop: 8 }}>
-          Latest Items Across System
+          {fr.dashboard.recentActivity.subtitle}
         </h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '24px' }}>
           {/* Recent Actions */}
           <div>
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-strong)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Latest Actions
+              {fr.dashboard.recentActivity.latestActions}
             </h3>
             <div style={{ display: 'grid', gap: '8px' }}>
               {isLoading ? (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>Loading...</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.loading}</p>
               ) : summary.recentActions.length > 0 ? (
                 summary.recentActions.map((action, idx) => (
                   <div
@@ -254,7 +255,7 @@ export default function Dashboard() {
                   </div>
                 ))
               ) : (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>No actions yet</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.noActions}</p>
               )}
             </div>
           </div>
@@ -262,11 +263,11 @@ export default function Dashboard() {
           {/* Recent Incidents */}
           <div>
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-strong)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Latest Incidents
+              {fr.dashboard.recentActivity.latestIncidents}
             </h3>
             <div style={{ display: 'grid', gap: '8px' }}>
               {isLoading ? (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>Loading...</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.loading}</p>
               ) : summary.recentIncidents.length > 0 ? (
                 summary.recentIncidents.map((incident, idx) => (
                   <div
@@ -292,7 +293,7 @@ export default function Dashboard() {
                   </div>
                 ))
               ) : (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>No incidents yet</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.noIncidents}</p>
               )}
             </div>
           </div>
@@ -300,11 +301,11 @@ export default function Dashboard() {
           {/* Recent Ideas */}
           <div>
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-strong)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Latest Ideas
+              {fr.dashboard.recentActivity.latestIdeas}
             </h3>
             <div style={{ display: 'grid', gap: '8px' }}>
               {isLoading ? (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>Loading...</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.loading}</p>
               ) : summary.recentIdeas.length > 0 ? (
                 summary.recentIdeas.map((idea, idx) => (
                   <div
@@ -330,47 +331,14 @@ export default function Dashboard() {
                   </div>
                 ))
               ) : (
-                <p className="muted" style={{ fontSize: '0.85rem' }}>No ideas yet</p>
+                <p className="muted" style={{ fontSize: '0.85rem' }}>{fr.dashboard.recentActivity.noIdeas}</p>
               )}
             </div>
           </div>
         </div>
       </motion.article>
 
-      <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="card-kicker">System</div>
-        <h2 className="page-title" style={{ marginTop: 8 }}>
-          Production-ready API integration
-        </h2>
-        <p className="panel-copy">
-          This dashboard is connected to the Laravel Sanctum backend and fetches real-time data from multiple endpoints. Data refreshes automatically every 30 seconds.
-        </p>
-        <div className="feature-row">
-          <div className="feature-pill">React Query</div>
-          <div className="feature-pill">Zustand</div>
-          <div className="feature-pill">Axios</div>
-          <div className="feature-pill">Chart.js</div>
-          <div className="feature-pill">Real-time Data</div>
-        </div>
-      </motion.article>
 
-      {user?.role === 'admin' && (
-        <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Admin tools</div>
-          <h2 className="page-title" style={{ marginTop: 8 }}>
-            Users management
-          </h2>
-          <p className="panel-copy">
-            Create new accounts, assign roles, and review all users from a dedicated admin screen.
-          </p>
-          <div className="button-row" style={{ justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-            <button type="button" className="btn btn-primary" onClick={() => navigate('/users')}>
-              <ShieldCheck size={16} />
-              Open Users
-            </button>
-          </div>
-        </motion.article>
-      )}
     </div>
   )
 }

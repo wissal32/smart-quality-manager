@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { fr } from '../i18n/fr'
 import logo from '../assets/wii.svg'
 
 const loginSchema = z.object({
-  email: z.string().email('Enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email(fr.login.validation.emailRequired),
+  password: z.string().min(1, fr.login.validation.passwordRequired),
 })
 
 export default function Login() {
@@ -54,10 +55,10 @@ export default function Login() {
 
     try {
       await login(parsed.data.email, parsed.data.password)
-      toast.success('Login successful')
+      toast.success(fr.login.messages.loginSuccess)
       navigate('/dashboard', { replace: true })
     } catch (error) {
-      toast.error(error?.message || 'Unable to login')
+      toast.error(error?.message || fr.login.messages.loginError)
     }
   }
 
@@ -75,36 +76,36 @@ export default function Login() {
               <img src={logo} alt="Smart Quality Manager Logo" className="auth-logo-img" />
             </div>
             <div>
-              <div className="sidebar-title">Smart Quality Manager</div>
+              <div className="sidebar-title">{fr.app.title}</div>
               <div className="muted" style={{ fontSize: '0.9rem', marginTop: 2 }}>
-                Sanctum-protected quality dashboard
+                {fr.login.subtitle}
               </div>
             </div>
           </div>
 
           <div className="page-row" style={{ marginTop: 24 }}>
             <ShieldCheck size={20} color="#bae6fd" />
-            <span className="muted">Secure access for quality management teams</span>
+            <span className="muted">{fr.login.description}</span>
           </div>
 
-          <h1 className="auth-title">Sign in to continue</h1>
+          <h1 className="auth-title">{fr.login.signInTitle}</h1>
           <p className="auth-copy">
-            Use your Laravel Sanctum account to access the Smart Quality Manager workspace.
+            {fr.login.signInDescription}
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
           <label className="field">
-            <span className="label">Email</span>
-            <input className="input" type="email" placeholder="sara@test.com" {...register('email')} />
+            <span className="label">{fr.login.email}</span>
+            <input className="input" type="email" placeholder={fr.login.emailPlaceholder} {...register('email')} />
             {errors.email && <span className="error-text">{errors.email.message}</span>}
           </label>
 
           <label className="field">
-            <span className="label">Password</span>
+            <span className="label">{fr.login.password}</span>
             <div className="auth-lock">
               <LockKeyhole size={16} />
-              <input className="input" type="password" placeholder="••••••••" {...register('password')} />
+              <input className="input" type="password" placeholder={fr.login.passwordPlaceholder} {...register('password')} />
             </div>
             {errors.password && <span className="error-text">{errors.password.message}</span>}
           </label>
@@ -117,7 +118,7 @@ export default function Login() {
             disabled={isSubmitting}
           >
             <LogIn size={16} />
-            {isSubmitting ? 'Signing in...' : 'Login'}
+            {isSubmitting ? fr.login.signingIn : fr.login.login}
           </motion.button>
         </form>
       </motion.section>

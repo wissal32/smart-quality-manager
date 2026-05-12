@@ -30,7 +30,7 @@ class EquipmentController extends Controller
         $equipment = Equipment::create($validated);
 
         return response()->json([
-            'message' => 'Equipment created successfully.',
+            'message' => 'Équipement créé avec succès.',
             'data' => $equipment,
         ], 201);
     }
@@ -56,7 +56,7 @@ class EquipmentController extends Controller
         $equipment->update($validated);
 
         return response()->json([
-            'message' => 'Equipment updated successfully.',
+            'message' => 'Équipement mis à jour avec succès.',
             'data' => $equipment->fresh(),
         ]);
     }
@@ -66,7 +66,7 @@ class EquipmentController extends Controller
         $equipment->delete();
 
         return response()->json([
-            'message' => 'Equipment deleted successfully.',
+            'message' => 'Équipement supprimé avec succès.',
         ]);
     }
 }

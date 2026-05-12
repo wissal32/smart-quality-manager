@@ -5,18 +5,19 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { Edit3, Plus, Trash2, Users as UsersIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { fr } from '../i18n/fr'
 import { createUser, deleteUser, listUsers, updateUser } from '../services/userService'
 
 const createSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  name: z.string().min(1, fr.users.form.nameValidation),
+  email: z.string().email(fr.users.form.emailValidation),
+  password: z.string().min(8, fr.users.form.passwordValidation),
   role: z.enum(['admin', 'quality_manager', 'it_referent', 'employee']),
   department: z.string().optional().or(z.literal('')),
 })
 
 const editSchema = createSchema.partial().extend({
-  password: z.string().min(8, 'Password must be at least 8 characters').optional().or(z.literal('')),
+  password: z.string().min(8, fr.users.form.passwordValidation).optional().or(z.literal('')),
 })
 
 const defaultValues = {
@@ -51,24 +52,24 @@ export default function Users() {
       return createUser(payload)
     },
     onSuccess: () => {
-      toast.success(editingUser ? 'User updated' : 'User created')
+      toast.success(editingUser ? fr.users.messages.userUpdated : fr.users.messages.userCreated)
       queryClient.invalidateQueries({ queryKey: ['users'] })
       setEditingUser(null)
       reset(defaultValues)
     },
     onError: (error) => {
-      toast.error(error?.message || 'Unable to save user')
+      toast.error(error?.message || fr.users.messages.unableToSave)
     },
   })
 
   const removeMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {
-      toast.success('User deleted')
+      toast.success(fr.users.messages.deleteSuccess)
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },
     onError: (error) => {
-      toast.error(error?.message || 'Unable to delete user')
+      toast.error(error?.message || fr.users.messages.unableToDelete)
     },
   })
 
@@ -143,38 +144,38 @@ export default function Users() {
 
       <section className="charts-grid">
         <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="card-kicker">Admin management</div>
+          <div className="card-kicker">{fr.users.form.adminTitle}</div>
           <h2 className="page-title" style={{ marginTop: 8 }}>
-            {editingUser ? 'Edit user' : 'Create user'}
+            {editingUser ? fr.users.form.editTitle : fr.users.form.createTitle}
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="auth-form" style={{ marginTop: 18 }}>
             <div className="users-grid">
               <label className="field">
-                <span className="label">Name</span>
+                <span className="label">{fr.users.form.name}</span>
                 <input className="input" {...register('name')} />
                 {errors.name && <span className="error-text">{errors.name.message}</span>}
               </label>
               <label className="field">
-                <span className="label">Email</span>
+                <span className="label">{fr.users.form.email}</span>
                 <input className="input" type="email" {...register('email')} />
                 {errors.email && <span className="error-text">{errors.email.message}</span>}
               </label>
               <label className="field">
-                <span className="label">Password{editingUser ? ' (optional)' : ''}</span>
+                <span className="label">{fr.users.form.password}{editingUser ? ` (${fr.users.form.passwordOptional})` : ''}</span>
                 <input className="input" type="password" {...register('password')} />
                 {errors.password && <span className="error-text">{errors.password.message}</span>}
               </label>
               <label className="field">
-                <span className="label">Role</span>
+                <span className="label">{fr.users.form.role}</span>
                 <select className="select" {...register('role')}>
-                  <option value="admin">Admin</option>
-                  <option value="quality_manager">Quality Manager</option>
-                  <option value="it_referent">IT Referent</option>
-                  <option value="employee">Employee</option>
+                  <option value="admin">{fr.users.form.roleOptions.admin}</option>
+                  <option value="quality_manager">{fr.users.form.roleOptions.qualityManager}</option>
+                  <option value="it_referent">{fr.users.form.roleOptions.itReferent}</option>
+                  <option value="employee">{fr.users.form.roleOptions.employee}</option>
                 </select>
               </label>
               <label className="field" style={{ gridColumn: '1 / -1' }}>
-                <span className="label">Department</span>
+                <span className="label">{fr.users.form.department}</span>
                 <input className="input" {...register('department')} />
               </label>
             </div>
@@ -182,12 +183,12 @@ export default function Users() {
             <div className="button-row" style={{ justifyContent: 'flex-end', flexWrap: 'wrap' }}>
               {editingUser && (
                 <button type="button" className="btn btn-ghost" onClick={cancelEdit}>
-                  Cancel
+                  {fr.common.buttons.cancel}
                 </button>
               )}
               <button type="submit" className="btn btn-primary" disabled={isSubmitting || saveMutation.isPending}>
                 <Plus size={16} />
-                {editingUser ? 'Update user' : 'Create user'}
+                {editingUser ? fr.users.form.updateButton : fr.users.form.createButton}
               </button>
             </div>
           </form>
@@ -196,8 +197,8 @@ export default function Users() {
         <motion.article className="panel-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="section-title">
             <div>
-              <div className="card-kicker">Directory</div>
-              <h2 className="page-title" style={{ marginTop: 8 }}>Users list</h2>
+              <div className="card-kicker">{fr.users.list.directory}</div>
+              <h2 className="page-title" style={{ marginTop: 8 }}>{fr.users.list.usersList}</h2>
             </div>
           </div>
 
@@ -205,17 +206,17 @@ export default function Users() {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Department</th>
-                  <th>Actions</th>
+                  <th>{fr.users.form.name}</th>
+                  <th>{fr.users.form.email}</th>
+                  <th>{fr.users.form.role}</th>
+                  <th>{fr.users.form.department}</th>
+                  <th>{fr.common.buttons.edit}</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <td colSpan="5" className="muted">Loading users...</td>
+                    <td colSpan="5" className="muted">{fr.common.messages.loading}</td>
                   </tr>
                 ) : users.length ? (
                   users.map((user) => (
@@ -238,7 +239,7 @@ export default function Users() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="muted">No users found.</td>
+                    <td colSpan="5" className="muted">{fr.common.messages.noData}</td>
                   </tr>
                 )}
               </tbody>

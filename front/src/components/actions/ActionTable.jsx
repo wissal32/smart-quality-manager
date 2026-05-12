@@ -1,4 +1,5 @@
 import ActionRow from './ActionRow'
+import { fr } from '../../i18n/fr'
 
 export default function ActionTable({ actions, isLoading, onEdit, onDelete, onStatusChange }) {
   return (
@@ -6,26 +7,26 @@ export default function ActionTable({ actions, isLoading, onEdit, onDelete, onSt
       <table className="table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Priority</th>
-            <th>Assigned To</th>
-            <th>Deadline</th>
-            <th>Quick Status</th>
-            <th>Actions</th>
+            <th>{fr.actions.table.title}</th>
+            <th>{fr.actions.table.status}</th>
+            <th>{fr.actions.table.priority}</th>
+            <th>{fr.actions.table.assignedTo}</th>
+            <th>{fr.actions.table.deadline}</th>
+            <th>{fr.actions.table.quickStatus}</th>
+            <th>{fr.common.buttons.edit}</th>
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             <tr>
               <td colSpan={7} className="muted" style={{ textAlign: 'center' }}>
-                Loading actions...
+                {fr.common.messages.loading}
               </td>
             </tr>
           ) : actions.length === 0 ? (
             <tr>
               <td colSpan={7} className="muted" style={{ textAlign: 'center' }}>
-                No actions found.
+                {fr.common.messages.noData}
               </td>
             </tr>
           ) : (

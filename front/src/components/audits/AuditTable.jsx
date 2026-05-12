@@ -1,4 +1,5 @@
 import AuditRow from './AuditRow'
+import { fr } from '../../i18n/fr'
 
 export default function AuditTable({ audits, isLoading, onView, onEdit, onDelete }) {
   return (
@@ -6,24 +7,24 @@ export default function AuditTable({ audits, isLoading, onView, onEdit, onDelete
       <table className="table">
         <thead>
           <tr>
-            <th>Zone</th>
-            <th>Created By</th>
-            <th>Score</th>
-            <th>Created Date</th>
-            <th>Actions</th>
+            <th>{fr.audits5s.table.zone}</th>
+            <th>{fr.audits5s.table.createdBy}</th>
+            <th>{fr.audits5s.table.score}</th>
+            <th>{fr.audits5s.table.createdDate}</th>
+            <th>{fr.common.buttons.edit}</th>
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             <tr>
               <td colSpan={5} className="muted" style={{ textAlign: 'center' }}>
-                Loading audits...
+                {fr.common.messages.loading}
               </td>
             </tr>
           ) : audits.length === 0 ? (
             <tr>
               <td colSpan={5} className="muted" style={{ textAlign: 'center' }}>
-                No audits found.
+                {fr.common.messages.noData}
               </td>
             </tr>
           ) : (
