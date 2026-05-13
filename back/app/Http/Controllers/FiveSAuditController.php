@@ -5,14 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\FiveSAudit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class FiveSAuditController extends Controller
 {
     public function index(): JsonResponse
     {
         return response()->json([
-            'data' => FiveSAudit::with(['zone', 'createdBy'])->latest()->get(),
+            'data' => FiveSAudit::select([
+                'id',
+                'zone_id',
+                'tri',
+                'ranger',
+                'nettoyer',
+                'standardiser',
+                'maintenir',
+                'score',
+                'created_by',
+                'created_at',
+                'updated_at',
+            ])->with(['zone', 'createdBy'])->latest()->get(),
         ]);
     }
 
@@ -33,26 +44,38 @@ class FiveSAuditController extends Controller
             'created_by' => ['required', 'exists:users,id'],
         ]);
 
-        // Handle file uploads
-        $beforePaths = [];
+        // Handle file uploads - encode to base64
+        $beforePhotoData = [];
         if ($request->hasFile('photos_before')) {
             foreach ($request->file('photos_before') as $file) {
-                $path = $file->store('audits/before', 'public');
-                $beforePaths[] = Storage::url($path);
+                $fileContent = file_get_contents($file->getRealPath());
+                $base64 = base64_encode($fileContent);
+                $mimeType = $file->getMimeType();
+                $beforePhotoData[] = [
+                    'data' => $base64,
+                    'mime' => $mimeType,
+                    'name' => $file->getClientOriginalName(),
+                ];
             }
         }
 
-        $afterPaths = [];
+        $afterPhotoData = [];
         if ($request->hasFile('photos_after')) {
             foreach ($request->file('photos_after') as $file) {
-                $path = $file->store('audits/after', 'public');
-                $afterPaths[] = Storage::url($path);
+                $fileContent = file_get_contents($file->getRealPath());
+                $base64 = base64_encode($fileContent);
+                $mimeType = $file->getMimeType();
+                $afterPhotoData[] = [
+                    'data' => $base64,
+                    'mime' => $mimeType,
+                    'name' => $file->getClientOriginalName(),
+                ];
             }
         }
 
-        // Create audit with file paths
-        $validated['photos_before'] = $beforePaths ? json_encode($beforePaths) : null;
-        $validated['photos_after'] = $afterPaths ? json_encode($afterPaths) : null;
+        // Create audit with base64 encoded photos
+        $validated['photos_before'] = $beforePhotoData ? json_encode($beforePhotoData) : null;
+        $validated['photos_after'] = $afterPhotoData ? json_encode($afterPhotoData) : null;
 
         $audit = FiveSAudit::create($validated)->load(['zone', 'createdBy']);
 
@@ -86,24 +109,36 @@ class FiveSAuditController extends Controller
             'created_by' => ['sometimes', 'required', 'exists:users,id'],
         ]);
 
-        // Handle file uploads for before photos
+        // Handle file uploads for before photos - encode to base64
         if ($request->hasFile('photos_before')) {
-            $beforePaths = [];
+            $beforePhotoData = [];
             foreach ($request->file('photos_before') as $file) {
-                $path = $file->store('audits/before', 'public');
-                $beforePaths[] = Storage::url($path);
+                $fileContent = file_get_contents($file->getRealPath());
+                $base64 = base64_encode($fileContent);
+                $mimeType = $file->getMimeType();
+                $beforePhotoData[] = [
+                    'data' => $base64,
+                    'mime' => $mimeType,
+                    'name' => $file->getClientOriginalName(),
+                ];
             }
-            $validated['photos_before'] = json_encode($beforePaths);
+            $validated['photos_before'] = json_encode($beforePhotoData);
         }
 
-        // Handle file uploads for after photos
+        // Handle file uploads for after photos - encode to base64
         if ($request->hasFile('photos_after')) {
-            $afterPaths = [];
+            $afterPhotoData = [];
             foreach ($request->file('photos_after') as $file) {
-                $path = $file->store('audits/after', 'public');
-                $afterPaths[] = Storage::url($path);
+                $fileContent = file_get_contents($file->getRealPath());
+                $base64 = base64_encode($fileContent);
+                $mimeType = $file->getMimeType();
+                $afterPhotoData[] = [
+                    'data' => $base64,
+                    'mime' => $mimeType,
+                    'name' => $file->getClientOriginalName(),
+                ];
             }
-            $validated['photos_after'] = json_encode($afterPaths);
+            $validated['photos_after'] = json_encode($afterPhotoData);
         }
 
         $five_s_audit->update($validated);

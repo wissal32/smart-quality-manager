@@ -15,6 +15,7 @@ const defaultFormValues = {
   title: '',
   description: '',
   category: '',
+  location: '',
   severity: 'low',
   assigned_to: '',
   status: 'open',
@@ -45,11 +46,31 @@ function normalizeIncident(item) {
   }
 }
 
+function getPhotosFromIncident(incident) {
+  if (!incident?.formatted_photos) {
+    return []
+  }
+  return Array.isArray(incident.formatted_photos) ? incident.formatted_photos : []
+}
+
 function toApiPayload(values, userId, includeReporter) {
+  // If FormData is passed (for file uploads), return as is
+  if (values instanceof FormData) {
+    if (includeReporter) {
+      values.append('reported_by', String(userId))
+    }
+    // Convert UI status to API status
+    if (values.has('status')) {
+      values.set('status', toApiStatus(values.get('status')))
+    }
+    return values
+  }
+
   const payload = {
     title: values.title,
     description: values.description,
     category: values.category,
+    location: values.location || null,
     severity: values.severity,
     assigned_to: Number(values.assigned_to),
     status: toApiStatus(values.status),
@@ -181,6 +202,7 @@ export default function Incidents() {
       title: editingIncident.title || '',
       description: editingIncident.description || '',
       category: editingIncident.category || '',
+      location: editingIncident.location || '',
       severity: toUiSeverity(editingIncident.severity),
       assigned_to: String(editingIncident.assigned_to || ''),
       status: editingIncident.status || 'open',
@@ -338,6 +360,7 @@ export default function Incidents() {
               mode={formMode}
               initialValues={formInitialValues}
               users={users}
+              existingPhotos={editingIncident ? getPhotosFromIncident(editingIncident) : []}
               isSubmitting={createMutation.isPending || updateMutation.isPending}
               onSubmit={handleSubmitForm}
               onCancel={closeForm}

@@ -8,7 +8,6 @@ use App\Http\Controllers\FiveSAuditController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -29,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::middleware('role:admin,quality_manager')->group(function (): void {
         Route::apiResource('actions', ActionController::class);
         Route::apiResource('five-s-audits', FiveSAuditController::class);
-        Route::apiResource('zones', ZoneController::class);
     });
 
     Route::middleware('role:admin,it_referent')->group(function (): void {

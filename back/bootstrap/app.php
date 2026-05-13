@@ -12,6 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Apply CORS middleware first (before other middleware)
+        $middleware->prepend(\App\Http\Middleware\CorsMiddleware::class);
+        
+        $middleware->statefulApi();
+        
+        // Exclude CSRF verification for API routes (using Bearer tokens instead)
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
+        
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);

@@ -474,80 +474,78 @@ export default function Audits5S() {
         onDelete={handleDelete}
       />
     </motion.section>
-  </div>
-);
 
-      {isFormOpen ? (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Audit form dialog">
-          <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="panel-row" style={{ justifyContent: 'space-between' }}>
-              <div>
-                <p className="card-kicker">{formMode === 'edit' ? 'Edit Audit' : 'Create Audit'}</p>
-                <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
-                  {formMode === 'edit' ? 'Update audit details' : 'Create a new 5S audit'}
-                </h3>
-              </div>
-              <ActionButton variant="ghost" onClick={closeForm}>
-                Close
-              </ActionButton>
+    {isFormOpen ? (
+      <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Audit form dialog">
+        <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="panel-row" style={{ justifyContent: 'space-between' }}>
+            <div>
+              <p className="card-kicker">{formMode === 'edit' ? 'Edit Audit' : 'Create Audit'}</p>
+              <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
+                {formMode === 'edit' ? 'Update audit details' : 'Create a new 5S audit'}
+              </h3>
             </div>
+            <ActionButton variant="ghost" onClick={closeForm}>
+              Close
+            </ActionButton>
+          </div>
 
-            <AuditForm
-              mode={formMode}
-              initialValues={formInitialValues}
-              zones={zones}
-              isSubmitting={createMutation.isPending || updateMutation.isPending}
-              onSubmit={handleSubmitForm}
-              onCancel={closeForm}
-            />
-          </motion.section>
-        </div>
-      ) : null}
+          <AuditForm
+            mode={formMode}
+            initialValues={formInitialValues}
+            zones={zones}
+            isSubmitting={createMutation.isPending || updateMutation.isPending}
+            onSubmit={handleSubmitForm}
+            onCancel={closeForm}
+          />
+        </motion.section>
+      </div>
+    ) : null}
 
-      {viewingAudit ? (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Audit details dialog" onClick={closeViewModal}>
-          <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} onClick={(e) => e.stopPropagation()}>
-            <div className="panel-row" style={{ justifyContent: 'space-between' }}>
+    {viewingAudit ? (
+      <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Audit details dialog" onClick={closeViewModal}>
+        <motion.section className="modal-card" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} onClick={(e) => e.stopPropagation()}>
+          <div className="panel-row" style={{ justifyContent: 'space-between' }}>
+            <div>
+              <p className="card-kicker">Audit Details</p>
+              <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
+                {viewingAudit.zone?.name || `Zone #${viewingAudit.zone_id}`}
+              </h3>
+            </div>
+            <ActionButton variant="ghost" onClick={closeViewModal}>
+              Close
+            </ActionButton>
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
               <div>
-                <p className="card-kicker">Audit Details</p>
-                <h3 style={{ color: 'var(--text-strong)', marginTop: 6 }}>
+                <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Zone</p>
+                <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
                   {viewingAudit.zone?.name || `Zone #${viewingAudit.zone_id}`}
-                </h3>
+                </p>
               </div>
-              <ActionButton variant="ghost" onClick={closeViewModal}>
-                Close
-              </ActionButton>
+              <div>
+                <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Created By</p>
+                <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
+                  {viewingAudit.createdBy?.name || `User #${viewingAudit.created_by}`}
+                </p>
+              </div>
+              <div>
+                <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Total Score</p>
+                <p style={{ fontWeight: 900, color: 'var(--text-strong)', fontSize: '1.4rem' }}>
+                  {viewingAudit.score ? `${viewingAudit.score} / 25` : 'N/A'}
+                </p>
+              </div>
+              <div>
+                <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Created Date</p>
+                <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
+                  {viewingAudit.created_at ? new Date(viewingAudit.created_at).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
             </div>
 
-            <div style={{ marginTop: 24 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
-                <div>
-                  <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Zone</p>
-                  <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
-                    {viewingAudit.zone?.name || `Zone #${viewingAudit.zone_id}`}
-                  </p>
-                </div>
-                <div>
-                  <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Created By</p>
-                  <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
-                    {viewingAudit.createdBy?.name || `User #${viewingAudit.created_by}`}
-                  </p>
-                </div>
-                <div>
-                  <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Total Score</p>
-                  <p style={{ fontWeight: 900, color: 'var(--text-strong)', fontSize: '1.4rem' }}>
-                    {viewingAudit.score ? `${viewingAudit.score} / 25` : 'N/A'}
-                  </p>
-                </div>
-                <div>
-                  <p className="muted" style={{ fontSize: '0.85rem', marginBottom: 8 }}>Created Date</p>
-                  <p style={{ fontWeight: 700, color: 'var(--text-strong)' }}>
-                    {viewingAudit.created_at ? new Date(viewingAudit.created_at).toLocaleDateString() : 'N/A'}
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ borderTop: '1px solid var(--panel-border)', paddingTop: 24 }}>
+            <div style={{ borderTop: '1px solid var(--panel-border)', paddingTop: 24 }}>
                 <h4 style={{ fontWeight: 700, color: 'var(--text-strong)', marginBottom: 16 }}>5S Scores</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 16 }}>
                   <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(56, 189, 248, 0.05)', borderRadius: '8px' }}>
@@ -627,6 +625,6 @@ export default function Audits5S() {
           </motion.section>
         </div>
       ) : null}
- 
-  
+    </div>
+  );
 }

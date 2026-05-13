@@ -4,10 +4,12 @@ export type IncidentPayload = {
   title?: string
   description?: string | null
   category?: string
+  location?: string | null
   severity?: 'low' | 'medium' | 'high' | 'critical'
   assigned_to?: number | null
   status?: 'open' | 'investigating' | 'resolved'
   reported_by?: number
+  photos?: File[]
 }
 
 export async function listIncidents() {
@@ -20,12 +22,12 @@ export async function getIncident(id: number | string) {
   return data?.data
 }
 
-export async function createIncident(payload: IncidentPayload) {
+export async function createIncident(payload: IncidentPayload | FormData) {
   const { data } = await api.post('/incidents', payload)
   return data?.data
 }
 
-export async function updateIncident(id: number | string, payload: IncidentPayload) {
+export async function updateIncident(id: number | string, payload: IncidentPayload | FormData) {
   const { data } = await api.put(`/incidents/${id}`, payload)
   return data?.data
 }
